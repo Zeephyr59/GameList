@@ -1,0 +1,197 @@
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@300;400;500;600;700&display=swap');
+
+/* ----- ------ ----- */
+/* ----- Global ----- */
+:root {
+    --color-dark: #212121;
+    --color-grey: #fafafa;
+    --color-white: #ffffff;
+    --color-red: #dc3545;
+    --color-green: #35dc56;
+}
+
+.txt-white {color: var(--color-white);}
+.txt-dark {color: var(--color-dark);}
+.txt-red {color: var(--color-red);}
+.bg-white {background-color: var(--color-white);}
+.bg-dark {background-color: var(--color-dark)}
+.bg-red {background-color: var(--color-red);}
+
+.btn-red{
+    background-color: var(--color-red);
+    border-radius: 15px;
+    border: 1px solid var(--color-red);
+    padding: 5px 15px;
+    font-weight: bold;
+    color: var(--color-white);
+    transition-duration: .5s;
+    text-decoration: none;
+}
+
+.btn-red:hover {
+    background-color: var(--color-white);
+    border-color: var(--color-red);
+    color: var(--color-red);
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Dosis', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-grey);
+}
+main{
+    flex: 1
+}
+.container {
+    max-width: 1320px;
+    margin: auto;
+}
+
+/* ----- Font Size ----- */
+.fs-40 {font-size: 40px;}
+.fs-30 {font-size: 30px;}
+.fs-24 {font-size: 24px;}
+.fs-18 {font-size: 18px;}
+.fs-16 {font-size: 16px;}
+.fs-12 {font-size: 12px;}
+
+/* ----- Text ----- */
+.bold {font-weight: bold;}
+.uppercase {text-transform: uppercase;}
+.underline {border-bottom: 1px solid var(--color-dark);}
+.txt-center {text-align: center;}
+.txt-left {text-align: left;}
+.txt-right {text-align: right;}
+
+/* ----- Bloc ----- */
+.box-shadow {box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);}
+.rounded-5 {border-radius: 5px;}
+.rounded-10 {border-radius: 10px;}
+.rounded-15 {border-radius: 15px;}
+
+/* ----- Padding ----- */
+.p-5 {padding: 5px;}
+.p-10 {padding: 10px;}
+.p-15 {padding: 15px;}
+.p-25 {padding: 25px;}
+
+.px-5 {padding-left: 5px;padding-right: 5px;}
+.px-10 {padding-left: 10px;padding-right: 10px;}
+.px-15 {padding-left: 15px;padding-right: 15px}
+.px-25 {padding-left: 25px;padding-right: 25px;}
+
+.pl-5 {padding-left: 5px;}
+.pl-10 {padding-left: 10px;}
+.pl-15 {padding-left: 15px;}
+.pl-25 {padding-left: 25px;}
+
+.pr-5 {padding-right: 5px;}
+.pr-10 {padding-right: 10px;}
+.pr-15 {padding-right: 15px;}
+.pr-25 {padding-right: 25px;}
+
+.py-5 {padding-top: 5px; padding-bottom: 5px;}
+.py-10 {padding-top: 10px; padding-bottom: 10px;}
+.py-15 {padding-top: 15px; padding-bottom: 15px;}
+.py-25 {padding-top: 25px; padding-bottom: 25px;}
+
+.pt-5 {padding-top: 5px;}
+.pt-10 {padding-top: 10px;}
+.pt-15 {padding-top: 15px;}
+.pt-25 {padding-top: 25px;}
+
+.pb-5 {padding-bottom: 5px;}
+.pb-10 {padding-bottom: 10px;}
+.pb-15 {padding-bottom: 15px;}
+.pb-25 {padding-bottom: 25px;}
+
+
+/* ----- Flex ----- */
+.flex-row{display: flex;flex-direction: row;}
+.flex-column{display: flex; flex-direction: column;}
+.wrap{flex-wrap: wrap;}
+.justify-content-center{justify-content: center;}
+.justify-space-around {justify-content: space-around;}
+.align-items-center{align-items: center;}
+
+
+
+
+/* ----- ---------- ----- */
+/* ----- Navigation ----- */
+.navbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    text-transform: uppercase;
+    padding: 0 15px;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: var(--color-white);
+    transition-duration: .5s;
+}
+
+.navbar a:hover {
+    color: var(--color-red);
+}
+
+.logo {
+    margin-right: 50px;
+    display: flex;
+    align-items: center;
+}
+
+.logo img{object-fit: contain; height: 80px;}
+
+.list {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+}
+
+#toggler,
+.navbar label {
+    display: none;
+    color: var(--color-white);
+}
+
+@media screen and (max-width: 700px) {
+    .menu {
+        width: 100%;
+        max-height: 0;
+        overflow: hidden;
+    }
+
+    .list {
+        flex-direction: column;
+        align-items: center;
+        padding: 0 20px;
+        margin: 0;
+    }
+
+    .navbar{
+        justify-content: space-between;
+        padding: 15px;
+    }
+
+    .navbar label {
+        display: inline-flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    #toggler:checked~.menu {
+        max-height: 100%;
+    }
+}
+

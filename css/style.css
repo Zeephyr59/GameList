@@ -1,0 +1,175 @@
+/* ----- ---- ---- ----- */
+/* ----- Card Game ----- */
+.card-game {
+    position: relative;
+    max-width: 400px;
+    min-width: 280px;
+    background-color: var(--color-dark);
+    color: var(--color-white);
+    border-radius: 10px;
+    border-top: 5px solid var(--color-red);
+    margin: 20px;
+}
+
+.card-game .score{
+    position: absolute;
+    background-color: var(--color-white);
+    color: var(--color-dark);
+    border: 2px solid var(--color-red);
+    border-radius: 20px;
+    font-weight: bold;
+    padding: 5px 10px;
+    top: 15px;
+    right: 15px;
+}
+
+.card-game img {
+    border-radius: 5px 5px 0 0;
+    object-fit: cover;
+    width: 100%;
+    height: 250px;
+}
+
+.card-game .card-txt {
+    padding: 10px;
+}
+
+.card-game .description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.card-game a{
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+}
+
+/* ----- ---- ------- ----- */
+/* ----- Game Preview ----- */
+/* ----- GamePreview ----- */
+.game-preview {
+    position: relative;
+    height: 600px;
+}
+
+.game-preview img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+.game-preview__details h1,
+.game-preview__details li,
+.game-preview__details i {
+    color: var(--color-white);
+}
+
+.game-preview .game-preview__details {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.game-preview .game-preview__details ul {
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+    font-weight: bold;
+    justify-content: space-around;
+    align-self: stretch;
+}
+
+.game-details {
+    margin: 20px auto;
+}
+
+.game-details > div {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.comment{
+    display: flex;
+    flex-flow: row nowrap;
+    width: 100%;
+    border-bottom: 1px solid var(--color-dark);
+}
+
+.comment .left{
+    width: 100px;
+    padding: 5px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.comment .right{
+    padding: 10px 0px 10px 10px;
+}
+
+
+.comment img{
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
+@media screen and (max-width: 576px)
+{
+    .comment .left {
+        width: 50px;
+    }
+    
+    .comment .right {
+        width: calc(100% - 60px);
+    }
+    
+    .comment img {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+#commentary{
+    display: flex;
+    flex-flow: wrap column;
+    padding: 10px;
+}
+
+#commentary button{
+    margin: 10px;
+    width: 75px; 
+    align-self: end;
+}
+
+#commentary textarea{
+    resize: vertical;
+}
+
+.flash-error {
+    background-color: var(--color-red);
+    color: var(--color-white);
+    padding: 5px 10px;
+    margin: 10px 0;
+}
+
+.flash-success {
+    background-color: var(--color-green);
+    color: var(--color-white);
+    padding: 5px 10px;
+    margin: 0 0 10px 0;
+}
