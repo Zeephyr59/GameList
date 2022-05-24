@@ -19,31 +19,53 @@ $reviews = findReviewsById($id);
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $review = [];
+    
+    if($_POST['action'] === 'addToLibrary'){
 
-    $review['isRecommanded'] = isset($_POST['is_recommanded']);
-
-    if (strlen($_POST['comment']) > 10 && strlen($_POST['comment']) < 600) {
-        $review['comment'] = htmlspecialchars($_POST['comment']);
-    } else {
-        $errors[] = 'Votre commentaire doit contenir entre 10 et 600 caractères';
-    }
-
-    if ($_POST['score']) {
-        $review['score'] = $_POST['score'];
-    } else {
-        $review['score'] = null;
-    }
-
-    if (count($errors) === 0) {
-        $review['gameId'] = $game['id'];
-        //TODO - Récupérer l'ID de l'utilisateur connecté
-        $review['userId'] = $connectedUser['id'];
-
-        if (!insertReview($review)) {
-            $errors[] = 'Une erreur inconnu est survenue';
+        if(!checkExistingInLibraryUser($connectedUser['id'], $game['id'])){
+            if(insertGameInLibrary($connectedUser['id'], $game['id'])){
+                addFlash('success', 'Le jeu a bien était ajouté à votre liste');
+            }else{
+                $errors[] = "Une erreur est survenue";
+            }
         } else {
-            addFlash('success', 'Votre commentaire a bien été publié');
+            if(deleteGameInLibrary($connectedUser['id'], $game['id'])){
+                addFlash('success', 'Le jeu a bien était supprimé de votre liste');
+            }else{
+                $errors[] = "Une erreur est survenue";
+            }
+        }
+    }
+
+    if($_POST['action'] === 'addReview'){ 
+        $review = [];
+
+        $review['isRecommanded'] = isset($_POST['is_recommanded']);
+
+        if (strlen($_POST['comment']) > 10 && strlen($_POST['comment']) < 600) {
+            $review['comment'] = htmlspecialchars($_POST['comment']);
+        } else {
+            $errors[] = 'Votre commentaire doit contenir entre 10 et 600 caractères';
+        }
+
+        if ($_POST['score']) {
+            $review['score'] = $_POST['score'];
+        } else {
+            $review['score'] = null;
+        }
+
+        if (count($errors) === 0) {
+            $review['gameId'] = $game['id'];
+            //TODO - Récupérer l'ID de l'utilisateur connecté
+            $review['userId'] = $connectedUser['id'];
+
+            if (!insertReview($review)) {
+                $errors[] = 'Une erreur inconnu est survenue';
+            } else {
+                addFlash('success', 'Votre commentaire a bien été publié');
+                header('Location: ' . $_SERVER['REQUEST_URI']);
+                die();
+            }
         }
     }
 }
@@ -88,6 +110,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             echo 'À venir';
                         } ?>
                     </li>
+
+                    <?php if($connectedUser['id']) { ?>
+                    <form method="POST">
+                        <input type="text" hidden name="action" value="addToLibrary">
+                        <?php if(!checkExistingInLibraryUser($connectedUser['id'], $game['id'])) { ?>
+                        <button class="btn-add" href="#">Ajouter à ma liste</button>
+                        <?php } else { ?>
+                        <button class="btn-add" href="#">Supprimé de ma liste</button>
+                        <?php } ?>
+                    </form>
+
+                    <?php } ?>
                 </ul>
             </div>
         </div>
@@ -128,9 +162,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php }
             }
 
-            if (!checkUserReviewedGame($game['id'], $connectedUser['id'])) { ?>
+            if(isLoggedIn()&& !checkUserReviewedGame($game['id'], $connectedUser['id'])) { ?>
             <form id="commentary" action="" method="POST">
-
+                <input type="text" hidden name="action" value="addReview">
                 <?php foreach ($errors as $error) { ?>
                 <p class="flash-error"><?php echo $error ?></p>
                 <?php } ?>

@@ -14,7 +14,7 @@
             <ul class="list">
                 <?php if(isLoggedIn()) { ?>
                 <li class="pt-25-sm"><a href="logout.php">Déconnexion</a></li>
-                <li><a href="#"><?php echo $connectedUser['username'] ?></a></li>
+                <li><img src="asset/profil/<?php echo $connectedUser['picture'] ?>" alt="profil picture"></li>
                 <?php } else { ?>
                 <li class="pt-25-sm"><a href="register.php">Inscription</a></li>
                 <li><a href="login.php">Connexion</a></li>
@@ -26,7 +26,7 @@
     <?php 
             foreach (getFlashMsg('success') as $flash)
             {
-                echo '<p class="pt-10 flash flash-'.$flash['type'].'">' . $flash['content'] . '</p>';
+                echo '<p class="container pt-10 flash flash-'.$flash['type'].'">' . $flash['content'] . '</p>';
             };
         ?>
 </header>

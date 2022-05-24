@@ -55,6 +55,7 @@ main{
     margin: auto;
 }
 
+
 /* ----- Font Size ----- */
 .fs-40 {font-size: 40px;}
 .fs-30 {font-size: 30px;}
@@ -154,7 +155,7 @@ main{
     align-items: center;
 }
 
-.logo img{object-fit: contain; height: 80px;}
+.logo img, .navbar li img{object-fit: contain; height: 80px;}
 
 .menu {
     display: flex;
@@ -165,6 +166,7 @@ main{
 .list {
     list-style: none;
     display: flex;
+    align-items: center;
     gap: 25px;
 }
 

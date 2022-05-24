@@ -185,6 +185,86 @@ function checkExistingUserEmail(string $email): bool
     return true;
 }
 
+//---------------------
+//EXO Add Game in Library
+function checkExistingInLibraryUser(int $userId, int $gameId): bool
+{
+    global $db;
+
+    $query = <<<SQL
+        SELECT COUNT(game_id) as counterGame FROM library
+        WHERE user_id = :userId AND game_id = :gameId;
+    SQL;
+
+    $stmt = $db->prepare($query);
+    $stmt->bindValue('userId', $userId, PDO::PARAM_INT);
+    $stmt->bindValue('gameId', $gameId, PDO::PARAM_INT);
+    $stmt->execute();
+
+    //Permet de récupéré directement le résultat du de la colonne (ici count) au lieu d'un tableau de résultat
+    $result = $stmt->fetchColumn();
+
+    if($result == 0){ 
+        return false;
+    }
+
+    return true;
+}
+
+function insertGameInLibrary(int $userId, int $gameId): bool
+{
+    global $db;
+    
+    $query = <<<SQL
+        INSERT INTO library (user_id, game_id, status) 
+        VALUES (:user_id, :game_id, 0);
+    SQL;
+
+    $stmt = $db->prepare($query);
+
+    $stmt->bindValue('user_id', $userId, PDO::PARAM_INT);
+    $stmt->bindValue('game_id', $gameId, PDO::PARAM_INT);
+
+    try {
+        $stmt->execute();
+        return true;
+    } catch (exception $e){
+        return false;
+    }
+}
+
+function deleteGameInLibrary(int $userId, int $gameId): bool
+{
+    global $db;
+    
+    $query = <<<SQL
+        DELETE FROM library WHERE user_id = :user_id AND game_id = :game_id;
+    SQL;
+
+    $stmt = $db->prepare($query);
+
+    $stmt->bindValue('user_id', $userId, PDO::PARAM_INT);
+    $stmt->bindValue('game_id', $gameId, PDO::PARAM_INT);
+
+    try {
+        $stmt->execute();
+        return true;
+    } catch (exception $e){
+        return false;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
 function findUserByEmail(string $email): ?array
 {
     global $db;
@@ -211,7 +291,9 @@ function findUserById(int $id): ?array
     global $db;
 
     $query = <<<SQL
-        SELECT * FROM user WHERE id = :id;
+        SELECT * FROM user
+        LEFT JOIN profile ON profile.user_id = user.id 
+        WHERE id = :id;
     SQL;
 
     $stmt = $db->prepare($query);
@@ -234,6 +316,12 @@ function login(int $userId): void
 {
     $_SESSION['authenticated'] = true;
     $_SESSION['userId'] = $userId;
+}
+
+function logout(): void
+{
+    $_SESSION['authenticated'] = false;
+    unset($_SESSION['userId']);
 }
 
 function isLoggedIn(): bool
