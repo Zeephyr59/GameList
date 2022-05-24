@@ -22,6 +22,7 @@
             if(insertUser($username, $email, $hashed)){
                 addFlash('success', 'Votre compte a bien été créé');
                 header('Location: http://localhost/Formation_Amigraf/D%C3%A9veloppement/PHP/GameList/login.php');
+                die();
             }else{
                 $errors[] = 'Une erreur est survenue, veuillez réessayer ultérieurement.';
             }

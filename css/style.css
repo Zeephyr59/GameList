@@ -160,19 +160,6 @@
     resize: vertical;
 }
 
-.flash-error {
-    background-color: var(--color-red);
-    color: var(--color-white);
-    padding: 5px 10px;
-    margin: 10px 0;
-}
-
-.flash-success {
-    background-color: var(--color-green);
-    color: var(--color-white);
-    padding: 5px 10px;
-    margin: 0 0 10px 0;
-}
 
 
 
@@ -186,4 +173,21 @@
     padding: 10px;
     width: calc(100% - 20px);
     resize: vertical;
+}
+
+
+.flash-error {
+    border-radius: 5px;
+    background-color: var(--color-red);
+    color: var(--color-white);
+    padding: 5px 10px;
+    margin: 10px 0;
+}
+
+.flash-success {
+    border-radius: 5px;
+    background-color: var(--color-green);
+    color: var(--color-white);
+    padding: 5px 10px;
+    margin: 10px 0 0;
 }
