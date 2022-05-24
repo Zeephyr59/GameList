@@ -113,6 +113,29 @@ function insertReview(array $review): bool
     }
 }
 
+function insertUser(string $username, string $email, string $password): bool
+{
+    global $db;
+    
+    $query = <<<SQL
+        INSERT INTO user (username, email, password, roles, created_at) 
+        VALUES (:username, :email, :password, 0, NOW());
+    SQL;
+
+    $stmt = $db->prepare($query);
+
+    $stmt->bindValue('username', $username);
+    $stmt->bindValue('email', $email);
+    $stmt->bindValue('password', $password);
+
+    try {
+        $stmt->execute();
+        return true;
+    } catch (exception $e){
+        return false;
+    }
+}
+
 function checkUserReviewedGame(int $gameId, int $userId): bool
 {
     global $db;
@@ -137,6 +160,29 @@ function checkUserReviewedGame(int $gameId, int $userId): bool
     
     return true;
     
+}
+
+function checkExistingUserEmail(string $email): bool
+{
+    global $db;
+
+    $query = <<<SQL
+        SELECT count(email) as counterEmail FROM user
+        WHERE email = :email;
+    SQL;
+
+    $stmt = $db->prepare($query);
+    $stmt->bindValue('email', $email);
+    $stmt->execute();
+
+    //Permet de récupéré directement le résultat du de la colonne (ici count) au lieu d'un tableau de résultat
+    $result = $stmt->fetchColumn();
+
+    if($result == 0){ 
+        return false;
+    }
+
+    return true;
 }
 
 
@@ -166,5 +212,52 @@ function getFlashMsg(): array
 function getDefaultGamePoster(): string
 {
     return 'https://thealmanian.com/wp-content/uploads/2019/01/product_image_thumbnail_placeholder.png';
+}
+
+// ----- Form -----
+function checkRegisterData(string $username, string $email, string $password, bool $cgu): array
+{
+    $errors = [];
+
+    //Check Username
+    if(strlen($username) < 3 || strlen($username) > 24){
+        $errors[] = 'Votre nom d\'utilisateur doit contenir entre 3 et 24 caractères';
+    } 
+
+    if (!ctype_alnum($username))
+    {
+        $errors[] = 'Votre nom d\'utilisateur doit contenir uniquement des caractères alphanumériques';
+    }
+
+
+    //Check Email
+    if(empty($email)){
+        $errors[] = 'Veuillez saisir votre adresse email';
+    }
+    else if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
+        $errors[] = 'Veuillez saisir une adresse email valide';
+    }
+    else if(checkExistingUserEmail($email)){
+        $errors[] = 'Cette adresse email est déjà utilisée';
+    }
+
+    
+    //Check Password
+    if(strlen($password) < 8 || strlen($password) > 30){
+        $errors[] = 'Votre mot de passe doit contenir entre 8 et 30 caractères';
+    } 
+
+    $regex = '/(?=.{0,}[a-z])(?=.{0,}[^a-zA-Z0-9])(?=.{0,}\d)/';
+    if(preg_match($regex, $password) === 0){
+        $errors[] = 'Votre mot de passe doit contenir au moins un chiffre, une lettre et un caractère spécial';
+    }
+
+
+    //Check CGU
+    if(!$cgu){
+        $errors[] = 'Veuillez accepter les conditions d\'utilisations';
+    }
+
+    return $errors;
 }
 ?>

@@ -10,7 +10,7 @@
                 <li><a href="index.php">Accueil</a></li>
                 <li><a href="librairy.php">Bibliothèque</a></li>
                 <li><a href="#">Ma liste</a></li>
-                <li><a href="#">Inscription</a></li>
+                <li><a href="register.php">Inscription</a></li>
                 <li><a href="#">Connexion</a></li>
             </ul>
         </div>

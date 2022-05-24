@@ -173,3 +173,17 @@
     padding: 5px 10px;
     margin: 0 0 10px 0;
 }
+
+
+
+
+/* ----- Formulaire ---- */
+.form-field input[type='text'], .form-field input[type='email'],
+.form-field input[type='password'] {
+    border: none;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    padding: 10px;
+    width: calc(100% - 20px);
+    resize: vertical;
+}
