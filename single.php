@@ -14,15 +14,20 @@ if (!$game) {
     header('Location: http://localhost/Formation_Amigraf/D%C3%A9veloppement/PHP/GameList/');
 }
 
+if(isLoggedIn()){
+    $isInUserLibrary = checkExistingInLibraryUser($connectedUser['id'], $game['id']);
+}
+
+
 $reviews = findReviewsById($id);
 
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
-    if($_POST['action'] === 'addToLibrary'){
+    if($_POST['action'] === 'toggleInLibrary'){
 
-        if(!checkExistingInLibraryUser($connectedUser['id'], $game['id'])){
+        if(!$isInUserLibrary){
             if(insertGameInLibrary($connectedUser['id'], $game['id'])){
                 addFlash('success', 'Le jeu a bien était ajouté à votre liste');
             }else{
@@ -35,6 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $errors[] = "Une erreur est survenue";
             }
         }
+
+        header('Location: ' . $_SERVER['REQUEST_URI']);
+        die();
     }
 
     if($_POST['action'] === 'addReview'){ 
@@ -113,8 +121,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <?php if($connectedUser['id']) { ?>
                     <form method="POST">
-                        <input type="text" hidden name="action" value="addToLibrary">
-                        <?php if(!checkExistingInLibraryUser($connectedUser['id'], $game['id'])) { ?>
+                        <input type="text" hidden name="action" value="toggleInLibrary">
+                        <?php if(!$isInUserLibrary){ ?>
                         <button class="btn-add" href="#">Ajouter à ma liste</button>
                         <?php } else { ?>
                         <button class="btn-add" href="#">Supprimé de ma liste</button>
