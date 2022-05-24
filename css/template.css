@@ -113,6 +113,9 @@ main{
 .pb-15 {padding-bottom: 15px;}
 .pb-25 {padding-bottom: 25px;}
 
+@media screen and (max-width: 700px) {
+    .pt-25-sm {padding-top: 25px;}
+}
 
 /* ----- Flex ----- */
 .flex-row{display: flex;flex-direction: row;}
@@ -153,6 +156,12 @@ main{
 
 .logo img{object-fit: contain; height: 80px;}
 
+.menu {
+    display: flex;
+    justify-content: space-around;
+    width: calc(100% - 240px);
+}
+
 .list {
     list-style: none;
     display: flex;
@@ -167,6 +176,7 @@ main{
 
 @media screen and (max-width: 700px) {
     .menu {
+        flex-direction: column;
         width: 100%;
         max-height: 0;
         overflow: hidden;

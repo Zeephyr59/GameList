@@ -10,9 +10,23 @@
                 <li><a href="index.php">Accueil</a></li>
                 <li><a href="librairy.php">Bibliothèque</a></li>
                 <li><a href="#">Ma liste</a></li>
-                <li><a href="register.php">Inscription</a></li>
-                <li><a href="#">Connexion</a></li>
+            </ul>
+            <ul class="list">
+                <?php if(isLoggedIn()) { ?>
+                <li class="pt-25-sm"><a href="logout.php">Déconnexion</a></li>
+                <li><a href="#"><?php echo $connectedUser['username'] ?></a></li>
+                <?php } else { ?>
+                <li class="pt-25-sm"><a href="register.php">Inscription</a></li>
+                <li><a href="login.php">Connexion</a></li>
+                <?php } ?>
             </ul>
         </div>
     </nav>
+
+    <?php 
+            foreach (getFlashMsg('success') as $flash)
+            {
+                echo '<p class="pt-10 flash flash-'.$flash['type'].'">' . $flash['content'] . '</p>';
+            };
+        ?>
 </header>

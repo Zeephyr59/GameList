@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (count($errors) === 0) {
         $review['gameId'] = $game['id'];
         //TODO - Récupérer l'ID de l'utilisateur connecté
-        $review['userId'] = 4;
+        $review['userId'] = $connectedUser['id'];
 
         if (!insertReview($review)) {
             $errors[] = 'Une erreur inconnu est survenue';
@@ -128,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php }
             }
 
-            if (!checkUserReviewedGame($game['id'], 4)) { ?>
+            if (!checkUserReviewedGame($game['id'], $connectedUser['id'])) { ?>
             <form id="commentary" action="" method="POST">
 
                 <?php foreach ($errors as $error) { ?>
