@@ -21,6 +21,18 @@ $bestGames = findGames('score', 3);
             quisquam enim repudiandae. Itaque aliquid nihil veritatis quam beatae omnis qui temporibus ipsam
             facilis.</p>
 
+
+        <!-- 
+            - Ajouter un système de filtre des jeux (utilisable ensemble ou non)
+            - Recherche par nom (contenant)
+            - Filtre par genre (déroulante multiple)
+            - Case à cocher pour les jeux indépendants
+            - Filtre par plateform (déroulante unique)    
+        -->
+
+
+
+
         <div class="flex-row justify-space-around wrap">
             <?php
             foreach ($recommandedGames as $game) {

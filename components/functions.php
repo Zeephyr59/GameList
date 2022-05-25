@@ -379,13 +379,6 @@ function buildUserPictureName(array $user): string
     return md5($user['id'] . '_' . $user['username']);
 }
 
-/*
-function buildUserPictureNameV2(string $username, int $id): string
-{
-    return md5($id . '_' . $username);
-}
-*/
-
 function getUserPicture(array $user, bool $withDefault = true): ?string
 {
     $name = buildUserPictureName($user);
@@ -401,22 +394,6 @@ function getUserPicture(array $user, bool $withDefault = true): ?string
 
     return null;
 }
-
-/*
-function getUserPictureForReview(string $username, int $id): string
-{
-    $name = buildUserPictureNameV2($username, $id);
-    $files = scandir('asset/uploads');
-
-    foreach($files as $file){
-        if(strstr($file, $name) !== false){
-            return 'asset/uploads/' . $file;
-        }
-    }
-    
-    return 'asset/profil/default.jpg';
-}
-*/
 
 
 // ----- Form -----

@@ -57,7 +57,6 @@
     <?php include 'components/header.php'; ?>
     <main class="container bg-white p-25 flex-column align-items-center">
         <h2 class="mt-20">Profil</h2>
-
         <div>
             <?php foreach ($errors as $error) { ?>
             <p class="flash-error"><?php echo $error ?></p>
