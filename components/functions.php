@@ -1,35 +1,109 @@
 <?php
 
-function findGames(string $order = NULL, int $limit = NULL): array
+function getAllGenres(): array
+{
+    global $db;
+
+    $query = <<<SQL
+        SELECT genre.id, genre.name FROM genre
+        LEFT JOIN game_genre ON game_genre.genre_id = genre.id
+        WHERE game_genre.genre_id IS NOT NULL
+        GROUP BY genre.id
+        ORDER BY genre.name;
+    SQL;
+
+    $stmt = $db->query($query);
+    $stmt->execute();
+    return $stmt->fetchAll();
+}
+
+function getAllPlatforms(): array
+{
+    global $db;
+
+    $query = <<<SQL
+        SELECT platform.id, platform.name FROM platform
+        LEFT JOIN game_platform ON game_platform.platform_id = platform.id
+        WHERE game_platform.platform_id IS NOT NULL
+        GROUP BY platform.id
+        ORDER BY platform.name;
+    SQL;
+
+    $stmt = $db->query($query);
+    $stmt->execute();
+    return $stmt->fetchAll();
+}
+
+function findGames(string $order = NULL, int $limit = NULL, $searchName = NULL, $searchGenre = NULL, $searchPlatform = NULL, $indeGame = null): array
 {
     global $db;
     
     $query = <<<SQL
-        SELECT game.id, game.title, game.slug, game.released_at, game.description, game.poster, GROUP_CONCAT(genre.name SEPARATOR ' ') as genres, ROUND(AVG(review.score),1) as score FROM game 
+        SELECT game.id, game.title, game.slug, game.released_at, game.description, game.poster, GROUP_CONCAT(DISTINCT genre.name SEPARATOR ' ') as genres, ROUND(AVG(review.score),1) as score FROM game 
+        LEFT JOIN game_platform ON game_platform.game_id = game.id
         LEFT JOIN game_genre ON game_genre.game_id = game.id
         LEFT JOIN genre ON game_genre.genre_id = genre.id
         LEFT JOIN review ON review.game_id = game.id 
-        GROUP BY game.id
     SQL;
 
+    $clauses = [];
+
+
+    if($searchName || $searchName != ''){
+        $clauses[] = 'game.title LIKE CONCAT( "%", :title, "%")';
+    }
+
+    if($searchGenre || $searchGenre != ''){
+        $clauses[] = 'genre.id = :genre';
+    }
+
+    if($searchPlatform || $searchPlatform != ''){
+        $clauses[] = 'game_platform.platform_id = :platform';
+    }
+
+    if($indeGame){
+        $clauses[] = 'game.editor_id IS NULL';
+    }
+
+    if(count($clauses) > 0){
+        $query .= ' WHERE ' . implode(' AND ', $clauses);
+    }
+
+    $query .= ' GROUP BY game.id ';
+    
     if($order === 'rand')
     {
         $query .= ' ORDER BY RAND() ';
-    } 
-
-    if ($order === 'score')
+    } else if ($order === 'score')
     {
         $query .= ' ORDER BY score DESC ';
+    } else if ($order === 'title')
+    {
+        $query .= ' ORDER BY game.title ';
     }
 
     if($limit !== NULL){
         $query .= 'LIMIT :limit';
     }
 
+    
+
     $stmt = $db->prepare($query);
 
     if ($limit !== NULL) {
         $stmt->bindValue('limit', $limit, PDO::PARAM_INT);
+    }
+
+    if($searchName){
+        $stmt->bindValue('title', $searchName);
+    }
+
+    if($searchGenre){
+        $stmt->bindValue('genre', $searchGenre, PDO::PARAM_INT);
+    }
+
+    if($searchPlatform){
+        $stmt->bindValue('platform', $searchPlatform, PDO::PARAM_INT);
     }
 
     $stmt->execute();

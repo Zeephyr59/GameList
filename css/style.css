@@ -180,13 +180,20 @@ button.btn-add {
 
 /* ----- Formulaire ---- */
 .form-field input[type='text'], .form-field input[type='email'],
-.form-field input[type='password'] {
+.form-field input[type='password'], .form-field select{
     border: none;
     border-radius: 5px;
     background-color: #f0f0f0;
     padding: 10px;
-    width: calc(100% - 20px);
     resize: vertical;
+}
+
+.searchGame {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
 }
 
 .profil .form-field{

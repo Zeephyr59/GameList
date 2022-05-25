@@ -58,7 +58,7 @@
 
             <div class="form-field pb-10">
                 <input type="checkbox" name="cgu" id="cgu" <?php echo !empty($cgu) ? 'checked' : '' ?>>
-                <label for="username">J'accepte les conditions d'utilisations</label>
+                <label for="cgu">J'accepte les conditions d'utilisations</label>
             </div>
 
             <button class="btn-red">S'inscrire</button>
