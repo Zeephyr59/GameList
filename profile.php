@@ -21,6 +21,11 @@
                 $allowedMimeTypes = ['image/jpeg', 'image/png'];
                 if(in_array($_FILES['picture']['type'], $allowedMimeTypes)){
                     
+                    $oldPicture = getUserPicture($connectedUser, false);
+                    if($oldPicture !== null){
+                        unlink($oldPicture);
+                    }
+
                     $explodedName = explode('.', $_FILES['picture']['name']);
                     $fileExt = strtolower(end($explodedName));
 

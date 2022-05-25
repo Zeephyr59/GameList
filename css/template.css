@@ -155,7 +155,7 @@ main{
     align-items: center;
 }
 
-.logo img {object-fit: contain; height: 80px;}
+.logo img{object-fit: contain; height: 80px;}
 
 
 .menu {

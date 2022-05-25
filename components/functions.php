@@ -379,12 +379,14 @@ function buildUserPictureName(array $user): string
     return md5($user['id'] . '_' . $user['username']);
 }
 
+/*
 function buildUserPictureNameV2(string $username, int $id): string
 {
     return md5($id . '_' . $username);
 }
+*/
 
-function getUserPicture(array $user): string
+function getUserPicture(array $user, bool $withDefault = true): ?string
 {
     $name = buildUserPictureName($user);
     $files = scandir('asset/uploads');
@@ -395,9 +397,12 @@ function getUserPicture(array $user): string
         }
     }
     
-    return 'asset/profil/default.jpg';
+    if($withDefault){ return 'asset/profil/default.jpg'; }
+
+    return null;
 }
 
+/*
 function getUserPictureForReview(string $username, int $id): string
 {
     $name = buildUserPictureNameV2($username, $id);
@@ -411,7 +416,7 @@ function getUserPictureForReview(string $username, int $id): string
     
     return 'asset/profil/default.jpg';
 }
-
+*/
 
 
 // ----- Form -----
