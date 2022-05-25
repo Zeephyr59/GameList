@@ -67,14 +67,33 @@ function findGamesById(int $id): ?array
         return $game;}
 }
 
+function findGamesInLibraryUser(int $userId): ?array
+{
+    global $db;
+    
+    $query = <<<SQL
+        SELECT game.id, game.title, game.slug, game.released_at, game.description, game.poster, GROUP_CONCAT(genre.name SEPARATOR ' ') as genres, ROUND(AVG(review.score),1) as score FROM game LEFT JOIN game_genre ON game_genre.game_id = game.id
+        LEFT JOIN genre ON game_genre.genre_id = genre.id
+        LEFT JOIN review ON review.game_id = game.id 
+        LEFT JOIN library on library.game_id = game.id
+        WHERE library.user_id = :userId
+        GROUP BY game.id;
+    SQL;
+
+    
+    $stmt = $db->prepare($query);
+    $stmt->bindValue('userId', $userId);
+    $stmt->execute();
+    return $stmt->fetchAll();
+}
+
 function findReviewsById(int $id): ?array
 {
     global $db;
 
     $query = <<<SQL
-        SELECT review.score, review.is_recommanded, review.comment, user.id, user.username, profile.picture from review
-        LEFT JOIN user ON user.id = review.user_id
-        LEFT JOIN profile ON profile.user_id = user.id        
+        SELECT review.score, review.is_recommanded, review.comment, user.id, user.username from review
+        LEFT JOIN user ON user.id = review.user_id     
         WHERE review.game_id = :id LIMIT 5;
     SQL;
 
@@ -185,8 +204,6 @@ function checkExistingUserEmail(string $email): bool
     return true;
 }
 
-//---------------------
-//EXO Add Game in Library
 function checkExistingInLibraryUser(int $userId, int $gameId): bool
 {
     global $db;
@@ -253,17 +270,6 @@ function deleteGameInLibrary(int $userId, int $gameId): bool
         return false;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 function findUserByEmail(string $email): ?array
 {
@@ -366,6 +372,44 @@ function getFlashMsg(): array
 function getDefaultGamePoster(): string
 {
     return 'https://thealmanian.com/wp-content/uploads/2019/01/product_image_thumbnail_placeholder.png';
+}
+
+function buildUserPictureName(array $user): string
+{
+    return md5($user['id'] . '_' . $user['username']);
+}
+
+function buildUserPictureNameV2(string $username, int $id): string
+{
+    return md5($id . '_' . $username);
+}
+
+function getUserPicture(array $user): string
+{
+    $name = buildUserPictureName($user);
+    $files = scandir('asset/uploads');
+
+    foreach($files as $file){
+        if(strstr($file, $name) !== false){
+            return 'asset/uploads/' . $file;
+        }
+    }
+    
+    return 'asset/profil/default.jpg';
+}
+
+function getUserPictureForReview(string $username, int $id): string
+{
+    $name = buildUserPictureNameV2($username, $id);
+    $files = scandir('asset/uploads');
+
+    foreach($files as $file){
+        if(strstr($file, $name) !== false){
+            return 'asset/uploads/' . $file;
+        }
+    }
+    
+    return 'asset/profil/default.jpg';
 }
 
 

@@ -155,7 +155,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="comments">
                 <div class="comment">
                     <div class="left">
-                        <img src="asset/profil/<?php echo $review['picture'] ?>" alt="profil picture">
+                        <img src="<?php echo getUserPictureForReview($review['username'], $review['id']) ?>"
+                            alt="profil picture">
                         <?php if ($review['score'] != null) { ?>
                         <p class="pt-10 bold underline"><?php echo $review['score'] ?></p>
                         <p class="bold">20</p>

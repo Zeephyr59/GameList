@@ -155,7 +155,8 @@ main{
     align-items: center;
 }
 
-.logo img, .navbar li img{object-fit: contain; height: 80px;}
+.logo img {object-fit: contain; height: 80px;}
+
 
 .menu {
     display: flex;

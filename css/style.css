@@ -189,6 +189,11 @@ button.btn-add {
     resize: vertical;
 }
 
+.profil .form-field{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
 .flash-error {
     border-radius: 5px;
