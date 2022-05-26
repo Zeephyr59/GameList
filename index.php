@@ -8,15 +8,20 @@
 <?php
 $bestGames = findGames('rand', 3);
 
+$errors = [];
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET)) {
     
-    $name = htmlspecialchars($_GET['searchByName']) ?? null;
-    $genre = htmlspecialchars($_GET['searchByGenre']) ?? null;
-    $platform = htmlspecialchars($_GET['searchByPlatform']) ?? null;
-    $indeGame = $_GET['indeGame'] ?? null;
+    $searchName = htmlspecialchars($_GET['searchByName']) ?? '';
+    $searchGenre = htmlspecialchars($_GET['searchByGenre']) ?? '';
+    $searchPlatform = htmlspecialchars($_GET['searchByPlatform']) ?? '';
+    $searchIndeGame = $_GET['indeGame'] ?? null;
 
-    $filterGames = findGames('title', null, $name, $genre, $platform, $indeGame);
+    $filterGames = findGames('title', null, $searchName, $searchGenre, $searchPlatform, $searchIndeGame);
+
+    if(empty($filterGames)) { 
+        $errors[] = 'Aucun jeux ne correspond à votre recherche';
+    }
 }
 ?>
 
@@ -34,7 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         <form method="GET" class="searchGame">
             <div class="form-field">
                 <label for="searchByName">Titre :</label>
-                <input type="text" name="searchByName" id="searchByName" placeholder="Titre du jeux">
+                <input type="text" name="searchByName" id="searchByName" placeholder="Titre du jeux"
+                    value="<?php echo $searchName ?? ''; ?>">
             </div>
 
             <div class="form-field">
@@ -42,7 +48,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 <select type="searchByGenre" name="searchByGenre" id="searchByGenre">
                     <option value="">Tous</option>
                     <?php foreach(getAllGenres() as $genre) { ?>
-                    <option value="<?php echo $genre['id'] ?>"><?php echo $genre['name'] ?></option>
+                    <option value="<?php echo $genre['id'] ?>" <?php if (isset($searchGenre)) {
+                            echo $searchGenre == $genre['id'] ? "selected" : "";
+                        } ?>><?php echo $genre['name'] ?></option>
                     <?php } ?>
                 </select>
             </div>
@@ -52,13 +60,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 <select type="searchByPlatform" name="searchByPlatform" id="searchByPlatform">
                     <option value="">Tous</option>
                     <?php foreach(getAllPlatforms() as $platform) { ?>
-                    <option value="<?php echo $platform['id'] ?>"><?php echo $platform['name'] ?></option>
+                    <option value="<?php echo $platform['id'] ?>" <?php if (isset($searchPlatform)) {
+                            echo $searchPlatform == $platform['id'] ? "selected" : "";
+                        } ?>><?php echo $platform['name'] ?></option>
                     <?php } ?>
                 </select>
             </div>
 
             <div class="form-field">
-                <input type="checkbox" name="indeGame" id="indeGame" <?php echo !empty($cgu) ? 'checked' : '' ?>>
+                <input type="checkbox" name="indeGame" id="indeGame"
+                    <?php echo !empty($searchIndeGame) ? 'checked' : '' ?>>
                 <label for="indeGame">Jeux Indépendants</label>
             </div>
 
@@ -81,11 +92,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             }
             ?>
         </div>
-        <?php } else { ?>
-        <div>
-            <p class="flash-error">Aucun jeux ne correspond à votre recherche</p>
-        </div>
+        <?php } 
+        foreach ($errors as $error) { ?>
+        <p class="flash-error"><?php echo $error ?></p>
         <?php } ?>
+
 
 
         <h2 class="pt-25">Les mieux notés</h2>
